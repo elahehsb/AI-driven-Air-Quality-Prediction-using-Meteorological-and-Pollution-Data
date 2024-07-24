@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Air Quality Prediction</title>
+</head>
+<body>
+    <h1>Air Quality Prediction</h1>
+    <form id="predictionForm">
+        <label for="PM2.5">PM2.5:</label>
+        <input type="text" id="PM2.5" name="PM2.5"><br><br>
+        <label for="PM10">PM10:</label>
+        <input type="text" id="PM10" name="PM10"><br><br>
+        <label for="CO">CO:</label>
+        <input type="text" id="CO" name="CO"><br><br>
+        <label for="NO2">NO2:</label>
+        <input type="text" id="NO2" name="NO2"><br><br>
+        <label for="SO2">SO2:</label>
+        <input type="text" id="SO2" name="SO2"><br><br>
+        <label for="O3">O3:</label>
+        <input type="text" id="O3" name="O3"><br><br>
+        <label for="Temperature">Temperature:</label>
+        <input type="text" id="Temperature" name="Temperature"><br><br>
+        <label for="Humidity">Humidity:</label>
+        <input type="text" id="Humidity" name="Humidity"><br><br>
+        <label for="WindSpeed">Wind Speed:</label>
+        <input type="text" id="WindSpeed" name="WindSpeed"><br><br>
+        <button type="submit">Predict AQI</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('predictionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                document.getElementById('result').innerText = 'Predicted AQI: ' + result.result;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
